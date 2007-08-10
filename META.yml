@@ -1,10 +1,12 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         ACME-ESP
-version:      1.001002
-version_from: ESP.pm
-installdirs:  site
-requires:
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.30
+--- #YAML:1.0
+name:                Acme-ESP
+version:             1.001003
+abstract:            The power to implant and extract strings' thoughts.
+license:             unknown
+generated_by:        ExtUtils::MakeMaker version 6.30_01
+author:              Tye McQueen
+distribution_type:   module
+requires:     
+meta-spec:
+    url: <http://module-build.sourceforge.net/META-spec-new.html>;
+    version: 1.1

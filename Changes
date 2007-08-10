@@ -1,4 +1,8 @@
-Revision history for Perl extension ACME::ESP
+Revision history for Perl extension Acme::ESP
+
+1.001_003   2007-08-10
+  - Don't shout the main spell.
+  - Overcome mild skepticism of some common environments.
 
 1.001_002   2007-08-10
   - Better spell casting.

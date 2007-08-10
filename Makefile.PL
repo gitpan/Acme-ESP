@@ -5,7 +5,7 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 
 WriteMakefile(
-    'NAME'              => 'ACME::ESP',
+    'NAME'              => 'Acme::ESP',
     'VERSION_FROM'      => 'ESP.pm',
     (  $] < 5.005  ?  ()  :
     ( 'AUTHOR'          => 'Tye McQueen',

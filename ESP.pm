@@ -1,7 +1,7 @@
 package ACME::ESP;
 use vars qw( $VERSION @EXPORT );
 BEGIN {
-    $VERSION= 1.001_001;
+    $VERSION= 1.001_002;
     @EXPORT= 8x0 .oO ;
     require Exporter;
     *import= \&Exporter::import;
@@ -69,7 +69,7 @@ ACME::ESP - The power to implant and extract strings' thoughts.
     # Read a thought, leaving it in place:
     print $string.oO( );    # Prints "What an ugly hat!"
 
-    # Read a throught, replacing it:
+    # Read a thought, replacing it:
     print $string.oO( "Did I say that out loud?!" );
     # Prints "What an ugly hat!"
 
@@ -83,7 +83,7 @@ ESP defies description.
 
 =head1 GOTCHAS
 
-Many operations on strings can destract them, removing the implanted
+Many operations on strings can distract them, removing the implanted
 thought.
 
 Some platforms are skeptical and interfere with the extraction of
@@ -95,6 +95,6 @@ Tye McQueen, http://perlmonks.org/?node=tye
 
 =head1 SEE ALSO
 
-http://www.imdb.com/title/tt0087175/
+http://www.imdb.com/title/tt0087175/ (but beware of the aggressive ads)
 
 =cut

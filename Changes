@@ -1,4 +1,7 @@
 Revision history for Perl extension ACME::ESP
 
+1.001_002   2007-08-10
+  - Better spell casting.
+
 1.001_001   2007-08-10
   - Stole the idea from Max.

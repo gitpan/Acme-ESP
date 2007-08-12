@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Acme-ESP
-version:             1.001003
+version:             1.001004
 abstract:            The power to implant and extract strings' thoughts.
 license:             unknown
 generated_by:        ExtUtils::MakeMaker version 6.30_01

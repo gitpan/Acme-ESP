@@ -1,5 +1,9 @@
 Revision history for Perl extension Acme::ESP
 
+1.001_004   2007-08-??
+  - Allow for slower thoughts.
+  - Resist even more forms of skepticism.
+
 1.001_003   2007-08-10
   - Don't shout the main spell.
   - Overcome mild skepticism of some common environments.

@@ -1,7 +1,7 @@
 package Acme::ESP;
 use vars qw( $VERSION @EXPORT );
 BEGIN {
-    $VERSION= 1.001_003;
+    $VERSION= 1.001_004;
     @EXPORT= 8x0 .oO ;
     require Exporter;
     *import= \&Exporter::import;
@@ -15,6 +15,8 @@ sub oO
     return bless \$thought, 'Acme::ESP::Scanner';
 }
 
+sub O'o { shift; oO( @_ ) }
+
 package Acme::ESP::Scanner;
 
 use overload(
@@ -22,17 +24,19 @@ use overload(
     nomethod => \&explode,
 );
 
-my $fluff= '';
-my $openMind= 5;
+my $openMind= 1<<21;
+my $fmt= 'LLLL';
 {
     my $mind= "thoughts";
     $mind= \$mind;
     my( $p2, $rc, $f )=
         unpack "LLL", unpack "P12", pack "L", $mind;
     my $state= unpack "C", pack "V", $f;
-    if(  $state == $openMind  ) {
-        ++$openMind;
-        $fluff= "x4";
+    $fmt= "LLJJ"    # "LJJL" seems correct, but doesn't work
+        if  eval { pack "J", 1; 1 };
+    if(  $state == 5  ) {
+        $openMind <<= 4;
+        $fmt= "x4" . $fmt;
     }
 }
 
@@ -45,11 +49,11 @@ sub scan
     my $secret= '';
     my( $p2, $rc, $f, $p3 )=
         unpack "L4", unpack "P16", pack "L", $mind;
-    if(  $openMind == unpack "C", pack "V", $f  ) {
+    if(  $openMind & $f  ) {
         my( $pv, $cur, $siz, $iv )=
-            unpack $fluff."L4", unpack "P20", pack "L", $p2;
+            unpack $fmt, unpack "P32", pack "L", $p2;
         $pv= $p3
-            if  $fluff;
+            if  $fmt =~ /x/;
         $secret= unpack "P$iv", pack "L", $pv-$iv;
     }
     bless $scanner, 'Acme::ESP';
@@ -92,7 +96,7 @@ Acme::ESP - The power to implant and extract strings' thoughts.
     print $string.oO( );    # Prints "What an ugly hat!"
 
     # Read a thought, replacing it:
-    print $string.oO( "Did I say that out loud?!" );
+    print $string . o O ( "Did I say that out loud?!" );
     # Prints "What an ugly hat!"
 
     # Empty their mind:
@@ -111,9 +115,17 @@ thought.
 Some platforms are skeptical and interfere with the extraction of
 stored thoughts.
 
-=head1 AUTHOR
+=head1 CONTRIBUTORS
 
-Tye McQueen, http://perlmonks.org/?node=tye
+Author: Tye McQueen, http://perlmonks.org/?node=tye
+
+http://perlmonks.org/?node=Corion appears to have implanted the idea
+into my brain.
+
+http://perlmonks.org/?node=jZed inspired much of the test suite.
+
+http://perlmonks.org/?node=Anno suggested the support for more drawn-out
+thoughts.
 
 =head1 SEE ALSO
 

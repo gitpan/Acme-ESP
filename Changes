@@ -1,5 +1,8 @@
 Revision history for Perl extension Acme::ESP
 
+1.001_006   2007-08-12
+  - A better theory.
+
 1.001_005   2007-08-12
   - Test a theory.
 

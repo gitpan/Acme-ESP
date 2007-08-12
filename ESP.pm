@@ -1,7 +1,7 @@
 package Acme::ESP;
 use vars qw( $VERSION @EXPORT );
 BEGIN {
-    $VERSION= 1.001_005;
+    $VERSION= 1.001_006;
     @EXPORT= 8x0 .oO ;
     require Exporter;
     *import= \&Exporter::import;
@@ -32,7 +32,7 @@ my $fmt= 'LLLL';
     my( $p2, $rc, $f )=
         unpack "LLL", unpack "P12", pack "L", $mind;
     my $state= unpack "C", pack "V", $f;
-    $fmt= "LJJL"    # Why does "LLJJ" work in cygwin?
+    $fmt= "LLLJ"    # Why does "LLJJ" work in cygwin?
         if  eval { pack "J", 1; 1 };
     if(  $state == 5  ) {
         $openMind <<= 4;

@@ -1,5 +1,8 @@
 Revision history for Perl extension Acme::ESP
 
+1.002_002   2007-08-15
+  - Declare that 5.9.3, 5.9.4 are dead to me.
+
 1.002_001   2007-08-13
   - Don't give ourselves away on approach.
   - Don't be tripped up by lawful, evil alignment.

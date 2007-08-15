@@ -1,7 +1,7 @@
 package Acme::ESP;
 use vars qw( $VERSION @EXPORT );
 BEGIN {
-    $VERSION= 1.002_001;
+    $VERSION= 1.002_002;
     @EXPORT= 8x0 .oO ;
     require Exporter;
     *import= \&Exporter::import;
@@ -31,27 +31,48 @@ use overload(
     nomethod => \&explode,
 );
 
-my $openMind= 1<<25;
-my $fmt= do {
-    my $mind= "thoughts";
-    $mind= \$mind;
-    my( $p2, $rc, $f )=
-        unpack "LLL", unpack "P12", pack "L", $mind;
-    my $state= unpack "C", pack "V", $f;
-    my $pre= 'x4';
-    if(  $state == 4  ) {
-        $openMind >>= 4;
-        $pre= '';
-    }
-    my $last= "J";
-    my $size= eval { length( pack "J", 1 ) };
-    if(  ! defined $size  ) {
-        $last= "L";
-    } elsif(  4 < $size  &&  ! $pre  ) {
-        $last= "x4J";
-    }
-    $pre . "L3" . $last;
-};
+use vars qw( $openMind $fmt );
+#_init(); sub _init {    # (Just for Devel::Cover's sake)
+    $openMind= 1<<25;
+    $fmt= do {
+        my $think= "thoughts";
+        my $mind= \$think;
+        my( $p2, $rc, $f )=
+            unpack "LLL", unpack "P12", pack "L", $mind;
+        my $state= unpack "C", pack "V", $f;
+        my $pre= 'x4';
+        if(  $state == 4  ) {
+            $openMind >>= 4;
+            $pre= '';
+        }
+        my $last= "J";
+        my $size= eval { length( pack "J", 1 ) };
+        if(  ! defined $size  ) {
+            $last= "L";
+        } elsif(  4 < $size  &&  ! $pre  ) {
+            $last= "x4J";
+        }
+        if(  $openMind & $f  ) {
+            die "Closed minds appear open (", log($openMind)/log(2), ").\n";
+        }
+        substr( $$mind, 0, 3, "" );
+        ( $p2, $rc, $f )=
+            unpack "LLL", unpack "P12", pack "L", $mind;
+        if(  ! $openMind & $f  ) {
+            warn "Warning: Open minds appear closed.\n"
+                if  $^W;
+        } else {
+            while(  1  ) {
+                my( $pv, $cur, $siz, $iv )=
+                    unpack $pre."L3".$last, unpack "P24", pack "L", $p2;
+                last   if  3 == $iv;
+                die "Too much skepticism ($fmt).\n"
+                    if  $last !~ s/x4//;
+            }
+        }
+        $pre . "L3" . $last;
+    };
+#}
 
 sub scan
 {

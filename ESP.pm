@@ -1,7 +1,7 @@
 package Acme::ESP;
 use vars qw( $VERSION @EXPORT );
 BEGIN {
-    $VERSION= 1.002_005;
+    $VERSION= 1.002_006;
     @EXPORT= 8x0 .oO ;
     require Exporter;
     *import= \&Exporter::import;
@@ -40,17 +40,11 @@ use vars qw( $openMind $fmt @fail );
         my( $p2, $rc, $f )=
             unpack "LLL", unpack "P12", pack "L", $mind;
         my $state= unpack "C", pack "V", $f;
-        my $pre= 'x4x4';
+        my $nv= eval { length pack "F", 1.0 } || 8;
+        my $pad= $nv - 4;
         if(  $state == 4  ) {
             $openMind >>= 4;
-            $pre= '';
-        }
-        my $last= "J";
-        my $size= eval { length( pack "J", 1 ) };
-        if(  ! defined $size  ) {
-            $last= "L";
-        } elsif(  4 < $size  &&  ! $pre  ) {
-            #!!# $last= "x4J";
+            $pad= 0;
         }
         if(  $openMind & $f  ) {
             die "Closed minds appear open (", log($openMind)/log(2), ").\n";
@@ -62,20 +56,25 @@ use vars qw( $openMind $fmt @fail );
             warn "Warning: Open minds appear closed.\n"
                 if  $^W;
         }
+        my $size= eval { length( pack "J", 1 ) };
+        my $last= "J";
+        if(  ! defined $size  ) {
+            $last= "L";
+        } elsif(  4 < $size  ) {
+            $last= "x4J"
+                if  0 == $pad % 8;
+        }
         my @fail;
         while(  1  ) {
+            my $pre= $pad ? "x$pad" : '';
             $fmt= $pre . "L3" . $last;
             my( $pv, $cur, $siz, $iv )=
-                unpack $fmt, unpack "P24", pack "L", $p2;
+                unpack $fmt, unpack "P32", pack "L", $p2;
             last   if  3 == $iv;
             push @fail, sprintf "%s:%x<%x:%x", $fmt, $cur, $siz, $iv;
-            if(  $pre =~ s/x8/x4/  ) {
-                $last =~ s/^J/x4J/;
-            } elsif(    $last !~ s/x4//
-                    &&  $pre !~ s/J$/L/
-            ) {
-                die "Too much skepticism (@fail).\n";
-            }
+            die "Too much skepticism (@fail).\n"
+                if  $last !~ s/x4//
+                &&  $last !~ s/J$/L/;
         }
     };
 #}

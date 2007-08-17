@@ -1,3 +1,4 @@
+BEGIN { $^W= 1; }
 use Test qw( plan );
 
 my $ok;
@@ -9,39 +10,46 @@ sub ok($;$$) {
     }
 }
 END {
-    print STDERR "# ( ", join " ", @Acme::ESP::fail, ")\n"
-        if  @Acme::ESP::fail;
+    print STDERR "# ( ", join " ", @Acme::ESP::Scanner::fail, ")\n"
+        if  @Acme::ESP::Scanner::fail;
     if(  defined $ok  &&  1 != $ok  ) {
-        print STDERR "# fmt = '$Acme::ESP::fmt'\n"
-            if  defined $Acme::ESP::fmt;
+        print STDERR "# fmt = '$Acme::ESP::Scanner::fmt'\n"
+            if  defined $Acme::ESP::Scanner::fmt;
     }
+    ok( $ok )
+        if  defined $ok;
 }
 
-BEGIN {
-    if(  5.009 <= $]  &&  $] < 5.009_005  ) {
-        print "1..0\n";
-        print STDERR "# This Perl experiment is dead. Long live 5.9.5+!\n";
-        exit( 0 );
-    }
-    $^W= 0;
-    my $mind= 'blank'; my $head= \$mind; $mind= pack "L", $head;
-    if(  ! unpack "L", $mind  ) {
-        print "1..0\n";
-        print STDERR "# Skip since this Perl can't pack a reference!\n";
-        exit( 0 );
-    }
-    $^W= 1;
-    plan(
-        tests => 14,
-        todo => [ ],
-    );
-    $ok= -1;
-
-    require Acme::ESP;
-    ok(1);
-    Acme::ESP->import();
-    ok(1);
+if(  5.009 <= $]  &&  $] < 5.009_005  ) {
+    print "1..0 # Skip This Perl experiment is dead. Long live 5.9.5+!\n";
+    exit( 0 );
 }
+$^W= 0;
+my $mind= 'blank'; my $head= \$mind; $mind= pack "L", $head;
+if(  ! unpack "L", $mind  ) {
+    print "1..0 # Skip Since this Perl can't pack a reference!\n";
+    exit( 0 );
+}
+$^W= 1;
+plan(
+    tests => 15,
+    todo => [ ],
+);
+$Test::TestLevel= 1;
+$ok= -1;
+
+if(  ! eval { require Acme::ESP; 1 }  ) {
+    warn $@, $/;
+    exit( 1 );
+}
+ok(1);
+Acme::ESP->import();
+ok(1);
+
+local $/;
+eval join '', "\n#line ", 3+__LINE__, '"', __FILE__, qq("\n), <DATA>, "; 1"
+    or  die $@;
+__END__
 
 $i= "person";
 1 for $i.oO("I exist");

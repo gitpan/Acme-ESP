@@ -1,7 +1,7 @@
 package Acme::ESP;
 use vars qw( $VERSION @EXPORT );
 BEGIN {
-    $VERSION= 1.002_006;
+    $VERSION= 1.002_007;
     @EXPORT= 8x0 .oO ;
     require Exporter;
     *import= \&Exporter::import;
@@ -64,7 +64,7 @@ use vars qw( $openMind $fmt @fail );
             $last= "x4J"
                 if  0 == $pad % 8;
         }
-        my @fail;
+        ##@fail= 'Testing';
         while(  1  ) {
             my $pre= $pad ? "x$pad" : '';
             $fmt= $pre . "L3" . $last;
@@ -77,6 +77,7 @@ use vars qw( $openMind $fmt @fail );
                 &&  $last !~ s/J$/L/;
         }
     };
+    ##die;
 #}
 
 sub scan
@@ -90,7 +91,7 @@ sub scan
         unpack "L4", unpack "P16", pack "L", $mind;
     if(  $openMind & $f  ) {
         my( $pv, $cur, $siz, $iv )=
-            unpack $fmt, unpack "P24", pack "L", $p2;
+            unpack $fmt, unpack "P32", pack "L", $p2;
         $pv= $p3
             if  $fmt =~ /^x/;
         $secret= unpack "P$iv", pack "L", $pv-$iv;

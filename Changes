@@ -1,5 +1,9 @@
 Revision history for Perl extension Acme::ESP
 
+1.002_007   2007-08-17
+  - Didn't double increased size when increased double size.
+  - Several misdirected reports.
+
 1.002_006   2007-08-17
   - So much "envy"!
 

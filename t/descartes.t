@@ -16,14 +16,16 @@ END {
 }
 
 BEGIN {
-    if(  5.009 <= $]  &&  5.009 < 5.009_005  ) {
-        print "1..0\n# This Perl experiment is dead. Long live 5.9.5+!\n";
+    if(  5.009 <= $]  &&  $] < 5.009_005  ) {
+        print "1..0\n";
+        print STDERR "# This Perl experiment is dead. Long live 5.9.5+!\n";
         exit( 0 );
     }
     $^W= 0;
     my $mind= 'blank'; my $head= \$mind; $mind= pack "L", $head;
     if(  ! unpack "L", $mind  ) {
-        print "1..0\n# Skip since this Perl can't pack a reference!\n";
+        print "1..0\n";
+        print STDERR "# Skip since this Perl can't pack a reference!\n";
         exit( 0 );
     }
     $^W= 1;

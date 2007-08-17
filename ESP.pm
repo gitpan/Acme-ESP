@@ -1,7 +1,7 @@
 package Acme::ESP;
 use vars qw( $VERSION @EXPORT );
 BEGIN {
-    $VERSION= 1.002_002;
+    $VERSION= 1.002_003;
     @EXPORT= 8x0 .oO ;
     require Exporter;
     *import= \&Exporter::import;

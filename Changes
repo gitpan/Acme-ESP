@@ -1,5 +1,9 @@
 Revision history for Perl extension Acme::ESP
 
+1.002_003   2007-08-16
+  - Make my thoughts on platforms easier to read.
+  - Mistakenly declared 5.9.5 dead to me.
+
 1.002_002   2007-08-15
   - Declare that 5.9.3, 5.9.4 are dead to me.
 

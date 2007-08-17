@@ -1,7 +1,7 @@
 package Acme::ESP;
 use vars qw( $VERSION @EXPORT );
 BEGIN {
-    $VERSION= 1.002_004;
+    $VERSION= 1.002_005;
     @EXPORT= 8x0 .oO ;
     require Exporter;
     *import= \&Exporter::import;
@@ -40,7 +40,7 @@ use vars qw( $openMind $fmt @fail );
         my( $p2, $rc, $f )=
             unpack "LLL", unpack "P12", pack "L", $mind;
         my $state= unpack "C", pack "V", $f;
-        my $pre= 'x4';
+        my $pre= 'x4x4';
         if(  $state == 4  ) {
             $openMind >>= 4;
             $pre= '';
@@ -50,7 +50,7 @@ use vars qw( $openMind $fmt @fail );
         if(  ! defined $size  ) {
             $last= "L";
         } elsif(  4 < $size  &&  ! $pre  ) {
-            $last= "x4J";
+            #!!# $last= "x4J";
         }
         if(  $openMind & $f  ) {
             die "Closed minds appear open (", log($openMind)/log(2), ").\n";
@@ -68,10 +68,14 @@ use vars qw( $openMind $fmt @fail );
             my( $pv, $cur, $siz, $iv )=
                 unpack $fmt, unpack "P24", pack "L", $p2;
             last   if  3 == $iv;
-            push @fail, sprintf "%s:%x", $fmt, $iv;
-            die "Too much skepticism (@fail).\n"
-                if  $last !~ s/x4//
-                &&  $last !~ s/J$/L/;
+            push @fail, sprintf "%s:%x<%x:%x", $fmt, $cur, $siz, $iv;
+            if(  $pre =~ s/x8/x4/  ) {
+                $last =~ s/^J/x4J/;
+            } elsif(    $last !~ s/x4//
+                    &&  $pre !~ s/J$/L/
+            ) {
+                die "Too much skepticism (@fail).\n";
+            }
         }
     };
 #}

@@ -37,6 +37,7 @@ BEGIN {
     );
     $ok= -1;
 
+    $DB::single= 1;
     require Acme::ESP;
     ok(1);
     Acme::ESP->import();

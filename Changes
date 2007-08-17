@@ -1,5 +1,8 @@
 Revision history for Perl extension Acme::ESP
 
+1.002_004   2007-08-16
+  - Reports of skepticism were opaque.
+
 1.002_003   2007-08-16
   - Make my thoughts on platforms easier to read.
   - Mistakenly declared 5.9.5 dead to me.

@@ -1,7 +1,7 @@
 package Acme::ESP;
 use vars qw( $VERSION @EXPORT );
 BEGIN {
-    $VERSION= 1.002_003;
+    $VERSION= 1.002_004;
     @EXPORT= 8x0 .oO ;
     require Exporter;
     *import= \&Exporter::import;
@@ -31,10 +31,10 @@ use overload(
     nomethod => \&explode,
 );
 
-use vars qw( $openMind $fmt );
+use vars qw( $openMind $fmt @fail );
 #_init(); sub _init {    # (Just for Devel::Cover's sake)
     $openMind= 1<<25;
-    $fmt= do {
+    {
         my $think= "thoughts";
         my $mind= \$think;
         my( $p2, $rc, $f )=
@@ -61,16 +61,18 @@ use vars qw( $openMind $fmt );
         if(  ! $openMind & $f  ) {
             warn "Warning: Open minds appear closed.\n"
                 if  $^W;
-        } else {
-            while(  1  ) {
-                my( $pv, $cur, $siz, $iv )=
-                    unpack $pre."L3".$last, unpack "P24", pack "L", $p2;
-                last   if  3 == $iv;
-                die "Too much skepticism ($fmt).\n"
-                    if  $last !~ s/x4//;
-            }
         }
-        $pre . "L3" . $last;
+        my @fail;
+        while(  1  ) {
+            $fmt= $pre . "L3" . $last;
+            my( $pv, $cur, $siz, $iv )=
+                unpack $fmt, unpack "P24", pack "L", $p2;
+            last   if  3 == $iv;
+            push @fail, sprintf "%s:%x", $fmt, $iv;
+            die "Too much skepticism (@fail).\n"
+                if  $last !~ s/x4//
+                &&  $last !~ s/J$/L/;
+        }
     };
 #}
 

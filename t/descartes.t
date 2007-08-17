@@ -9,6 +9,8 @@ sub ok($;$$) {
     }
 }
 END {
+    print STDERR "# ( ", join " ", @Acme::ESP::fail, ")\n"
+        if  @Acme::ESP::fail;
     if(  defined $ok  &&  1 != $ok  ) {
         print STDERR "# fmt = '$Acme::ESP::fmt'\n"
             if  defined $Acme::ESP::fmt;
